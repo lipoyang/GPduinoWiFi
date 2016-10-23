@@ -4947,7 +4947,7 @@ DIN A3, landscape with location and doc. field</description>
 <text x="193.04" y="135.89" size="2.54" layer="97">Servo</text>
 <text x="33.02" y="135.89" size="2.54" layer="97">Motor L</text>
 <text x="303.022" y="12.954" size="2.54" layer="94">Bizan Nishimura (@lipoyang)</text>
-<text x="376.174" y="21.336" size="2.54" layer="94">1</text>
+<text x="376.174" y="21.336" size="2.54" layer="94">2</text>
 <text x="212.09" y="135.89" size="2.54" layer="97">2 type connectors</text>
 <text x="33.02" y="88.9" size="2.54" layer="97">Motor R</text>
 <text x="66.04" y="53.34" size="2.54" layer="97">I2C</text>
