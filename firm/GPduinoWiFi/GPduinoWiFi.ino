@@ -126,7 +126,7 @@ void runaway_check()
 }
 
 /*
- * サーボの初期化
+ * サーボの初期化, モードの設定
  */
 void servo_init()
 {
@@ -137,6 +137,13 @@ void servo_init()
             g_servo_ofs[i] = (int)((signed char)EEPROM.read(i*3 + 2));
             g_servo_amp[i] =                    EEPROM.read(i*3 + 3);
         }
+        drive_mode = EEPROM.read(10);
+        if(drive_mode == MODE_TANK){
+            Serial.println("TANK MODE");
+        }else{
+            Serial.println("CAR MODE");
+        }
+        
     }else{
         EEPROM.write(0, 0xA5);
         for(i=0;i<3;i++){
@@ -147,6 +154,8 @@ void servo_init()
             EEPROM.write(i*3 + 2, g_servo_ofs[i]);
             EEPROM.write(i*3 + 3, g_servo_amp[i]);
         }
+        drive_mode = MODE_CAR;
+        EEPROM.write(10, drive_mode);
         EEPROM.commit();
     }
     servo[0].attach(SERVO0_PWM);
@@ -197,15 +206,14 @@ void setup() {
     pinMode(MOTOR_R_IN1, OUTPUT);
     pinMode(MOTOR_R_IN2, OUTPUT);
     
-    // モード判定 TODO
+    // モード判定
     //int mode_check = analogRead( MODE_CHECK );
     //drive_mode = (mode_check > 512) ? MODE_CAR : MODE_TANK;
-    drive_mode = MODE_CAR;
-
-    if(drive_mode == MODE_CAR){
-        // サーボの初期化
+    
+    //if(drive_mode == MODE_CAR){
+        // サーボの初期化, モード設定
         servo_init();
-    }
+    //}
     
     // 変数初期化
     g_fb = 0;
@@ -472,6 +480,7 @@ void udpComm_callback(char* buff)
                 EEPROM.write(i*3 + 2, g_servo_ofs[i]);
                 EEPROM.write(i*3 + 3, g_servo_amp[i]);
             }
+            EEPROM.write(10, drive_mode);
             EEPROM.commit();
             break;
         case 'L':
@@ -486,6 +495,37 @@ void udpComm_callback(char* buff)
                 Uint16ToHex(&txbuff[4+i*5], (unsigned short)((unsigned char)g_servo_ofs[i]), 2);
                 Uint16ToHex(&txbuff[6+i*5], (unsigned short)(               g_servo_amp[i]), 2);
             }
+            txbuff[18]='$';
+            txbuff[19]='\0';
+            udpComm.send(txbuff);
+            break;
+        }
+        break;
+        
+    /* Vコマンド(車両モードの設定)
+        (1)自動車モードに設定
+           書式: #VC$
+        (2)戦車モードに設定
+           書式: #VT$
+        (3)車両モードの読み出し
+           書式: #VL$
+     */
+    case 'V':
+        switch(buff[1]){
+        case 'C':
+            drive_mode = MODE_CAR;
+            //EEPROM.write(10, drive_mode);
+            //EEPROM.commit();
+            break;
+        case 'T':
+            drive_mode = MODE_TANK;
+            //EEPROM.write(10, drive_mode);
+            //EEPROM.commit();
+            break;
+        case 'L':
+            txbuff[0]='#';
+            txbuff[1]='V';
+            txbuff[2]= (drive_mode == MODE_TANK) ? 'T' : 'C';
             txbuff[18]='$';
             txbuff[19]='\0';
             udpComm.send(txbuff);

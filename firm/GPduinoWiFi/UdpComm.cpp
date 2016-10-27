@@ -35,7 +35,7 @@ void UdpComm::beginAP(char* ssid, char* password)
     mode = UDP_COMM_MODE_AP;
     
     if(ssid == NULL){
-        sprintf(this->mySSID, "esp8266-%06x", ESP.getChipId());
+        sprintf(this->mySSID, "gpduino-%06x", ESP.getChipId());
     }else{
         strncpy(mySSID, ssid, sizeof(mySSID)-1);
         mySSID[sizeof(mySSID)-1] = '\0';
