@@ -3,7 +3,7 @@ GPduino WiFi
 
 ## 概要
 GPduino WiFiは、ESP8266搭載のWiFiラジコン制御ボードです。  
-<!-- GPduinoに関する詳細は、[GPduino特設ページ](http://lipoyang.net/gpduino)をごらんください。  -->
+GPduinoに関する詳細は、[GPduinoサポートページ](http://lipoyang.net/gpduino)をごらんください。  
 GPduinoWiFiの回路/基板設計データとプリセットファームウェアのソースをここに公開します。
 
 ![GPduinoWiFiの写真](image/gpduino_wifi.png)　　　　　![概要の図](image/gpduino_wifi_overview.png)
