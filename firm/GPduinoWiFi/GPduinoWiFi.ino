@@ -268,7 +268,7 @@ void ctrl_motor(int ch, int val)
 
     digitalWrite(IN1[ch], in1);
     digitalWrite(IN2[ch], in2);
-    analogWrite(PWM[ch], pwm);
+    analogWrite(PWM[ch], pwm*4);
 }
 
 /**
